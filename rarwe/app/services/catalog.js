@@ -8,14 +8,10 @@ import { isArray } from '@ember/array';
 function extractRelationships(object) {
   let relationships = {};
   for (let relationshipName in object) {
-    relationships[relationshipName] =
-      object[relationshipName].links.related;
+    relationships[relationshipName] = object[relationshipName].links.related;
   }
   return relationships;
 }
-
-
-
 
 export default class CatalogService extends Service {
   storage = {};
@@ -25,7 +21,6 @@ export default class CatalogService extends Service {
     this.storage.bands = tracked([]);
     this.storage.songs = tracked([]);
   }
-
 
   //#--- Fetch's alll
   async fetchAll(type) {
@@ -42,9 +37,7 @@ export default class CatalogService extends Service {
       this.loadAll(json);
       return this.songs;
     }
-
   }
-
 
   loadAll(json) {
     let records = [];
@@ -53,7 +46,6 @@ export default class CatalogService extends Service {
     }
     return records;
   }
-
 
   _loadResource(data) {
     let record;
@@ -97,7 +89,7 @@ export default class CatalogService extends Service {
 
   //#--------------------------
 
-  //#---Update
+  //#--- Update
   async update(type, record, attributes) {
     let payload = {
       data: {
@@ -106,10 +98,10 @@ export default class CatalogService extends Service {
         attributes,
       },
     };
-    let url = type === 'band' ? `/bands/${record.id}` :
-      `/songs/${record.id}`;
+    let url = type === 'band' ? `/bands/${record.id}` : `/songs/${record.id}`;
     await fetch(url, {
-      method: 'PATCH', headers: {
+      method: 'PATCH',
+      headers: {
         'Content-Type': 'application/vnd.api+json',
       },
       body: JSON.stringify(payload),
@@ -118,7 +110,10 @@ export default class CatalogService extends Service {
 
   add(type, record) {
     let collection = type === 'band' ? this.storage.bands : this.storage.songs;
-    collection.push(record);
+    let recordIds = collection.map((record) => record.id);
+    if (!recordIds.includes(record.id)) {
+      collection.push(record);
+    }
   }
 
   //# fetch songs and band
@@ -128,8 +123,7 @@ export default class CatalogService extends Service {
     let json = await response.json();
     if (isArray(json.data)) {
       record[relationship] = this.loadAll(json);
-    }
-    else {
+    } else {
       record[relationship] = this.load(json);
     }
     return record[relationship];
