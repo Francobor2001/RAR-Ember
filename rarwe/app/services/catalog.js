@@ -22,7 +22,7 @@ export default class CatalogService extends Service {
     this.storage.songs = tracked([]);
   }
 
-  //#--- Fetch's alll
+  //#--- Fetch's all
   async fetchAll(type) {
     if (type === 'bands') {
       let response = await fetch('/bands');

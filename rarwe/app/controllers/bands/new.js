@@ -12,7 +12,7 @@ export default class BandsNewController extends Controller {
   constructor() {
     super(...arguments);
     this.router.on('routeWillChange', (transition) => {
-      if(transition.isAborted){
+      if (transition.isAborted) {
         return;
       }
 
@@ -31,7 +31,6 @@ export default class BandsNewController extends Controller {
       }
     });
   }
-
 
   @action
   updateName(event) {
