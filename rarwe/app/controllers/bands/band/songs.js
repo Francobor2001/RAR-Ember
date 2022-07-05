@@ -1,31 +1,89 @@
 import Controller from '@ember/controller';
-import { tracked } from '@glimmer/tracking' 
-import {action} from '@ember/object';
+import { tracked } from '@glimmer/tracking'
+import { action } from '@ember/object';
 import Song from 'rarwe/models/song';
 import { inject as service } from '@ember/service';
+import fetch from 'fetch';
 
 export default class BandsBandSongsController extends Controller {
   @tracked showAddSong = true;
   @tracked title = '';
+
   @service catalog;
 
   @action
-  updateTitle(event){
+  updateTitle(event) {
     this.title = event.target.value;
   }
 
   @action
-  saveSong(){
+  async updateRating(song, rating) {
+   
+    song.rating = rating;
+    let payload = {
+      data: {
+        id: song.id,
+        type: 'songs',
+        attributes: {
+          rating
+        }
+      }
+    };
     
-    let song = new Song({ title: this.title, band: this.model });
-     this.catalog.add('song', song);
-    this.model.songs = [...this.model.songs, song];
-    this.title='';
-    this.showAddSong = true;
+    const response = await fetch(`/songs/${song.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/vnd.api+json'
+      },
+      body: JSON.stringify(payload)
+    });
+    
   }
 
   @action
-  cancel(){
+  async saveSong() {
+    let payload = {
+      data: {
+        type: 'songs',
+        attributes: { title: this.title },
+        relationships: {
+          band: {
+            data: {
+              id: this.model.id,
+              type: 'bands'
+            }
+          }
+        }
+      }
+    };
+    let response = await fetch('/songs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    let json = await response.json();
+    let { id, attributes, relationships } = json.data;
+    let rels = {};
+
+    for (let relationshipName in relationships) {
+      rels[relationshipName] =
+        relationships[relationshipName].links.related;
+    }
+    let song = new Song({ id, ...attributes }, rels);
+  
+    this.catalog.add('song', song);
+    this.model.songs = [...this.model.songs, song];
+    this.title = '';
+    this.showAddSong = true;
+
+  }
+
+
+  @action
+  cancel() {
     this.title = '';
     this.showAddSong = true;
   }
