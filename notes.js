@@ -23,3 +23,22 @@
 
 //? modelFor() ==> fetches the model of the parent route 
 
+
+//* ----Tests
+
+//* Acceptance 
+// test that exercises the whole system; automate user actions
+
+//* Integration test
+//#Good fit for component and helpers
+// tests as these tests verify what they render when 
+//invoked with different parameters and how they react to events.
+ 
+//* Unit test
+//#services, controllers, and models.
+/*Unit tests verify that a certain unit, completely isolated from its environment
+, behaves as we expect it to */
+
+
+//*Add service test
+//ember g service-test catalog

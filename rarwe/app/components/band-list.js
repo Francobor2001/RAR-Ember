@@ -4,7 +4,6 @@ export default class BandListComponent extends Component {
   @service router;
   get bands() {
     return this.args.bands.map((band) => {
-      debugger;
       return { band, isActive: this.router.isActive('bands.band', band) };
     });
   }
