@@ -39,6 +39,7 @@
 /*Unit tests verify that a certain unit, completely isolated from its environment
 , behaves as we expect it to */
 
+//# this.owner: gives access to the application instance running in the test
 
 //*Add service test
 //ember g service-test catalog

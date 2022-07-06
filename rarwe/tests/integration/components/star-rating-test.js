@@ -9,16 +9,17 @@ module('Integration | Component | star-rating', function (hooks) {
   test('Renders the full and empty stars correctly', async function (assert) {
     this.set('rating', 4);
     this.set('updateRating', () => {});
-
+    
+    // <StarRating @rating="{{song.rating}}" @onUpdate={{fn this.updateRating song}} />
     await render(hbs` <StarRating
         @rating={{this.rating}}
         @onUpdate={{this.updateRating}}
       />
 `);
-
     assert
       .dom('[data-test-rr="full-star"]')
       .exists({ count: 4 }, 'The right amount of full stars is rendered');
+    
     assert
       .dom('[data-test-rr="empty-star"]')
       .exists({ count: 1 }, 'The right amount of empty stars is rendered');

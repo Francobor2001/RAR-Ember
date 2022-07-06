@@ -1,24 +1,59 @@
 {{page-title @model.name " songs | Rock & Roll with Octane"
 replace=true}}
-{{#if @model.songs.length}}
+{{#if this.sortedSongs.length}}
+{{!-- # Sort Buttons --}}
+<div class="mb-8">
+  <span class="relative z-0 inline-flex shadow-sm">
+    <button type="button" class="rounded-l-md inline-flex items-center px-4 py-2 border
+   border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100
+   hover:text-white hover:bg-purple-500" data-test-rr="sort-by-title-asc" {{on "click" (set this "sortBy" "title" )}}>
+      Title
+      <FaIcon class="ml-2" @icon="angle-up" @prefix="fas" />
+    </button>
+    <button type="button" class="-ml-px inline-flex items-center px-4 py-2 border border-
+   gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-
+   white hover:bg-purple-500" data-test-rr="sort-by-title-desc" {{on "click" (set this "sortBy" "-title" )}}>
+      Title
+      <FaIcon class="ml-2" @icon="angle-down" @prefix="fas" />
+    </button>
+    <button class="-ml-px inline-flex items-center px-4 py-2 border border-
+gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-
+white hover:bg-purple-500" type="button" data-test-rr="sort-by-rating-asc" {{on "click" (set this "sortBy" "rating"
+      )}}>
+      Rating
+      <FaIcon class="ml-2" @icon="angle-up" @prefix="fas" />
+    </button>
+    <button type="button" class="rounded-r-md -ml-px inline-flex items-center px-4 py-2
+border border-gray-500 bg-purple-600 leading-5 font-medium text-
+gray-100 hover:bg-purple-500 hover:text-white" data-test-rr="sort-by-rating-desc" {{on "click" (set
+      this "sortBy" "-rating" )}}>
+      Rating
+      <FaIcon class="ml-2" @icon="angle-down" @prefix="fas" />
+    </button>
+  </span>
+</div>
+{{!-- ---- --}}
+{{!-- # Show songs --}}
 <ul>
-  {{#each @model.songs as |song|}}
-  <li class="mb-2">
+  {{#each this.sortedSongs as |song|}}
+  <li class="mb-2" data-test-rr="song-list-item">
     {{song.title}}
     <span class="float-right">
-      <StarRating @rating="{{song.rating}}" 
-                  @onUpdate={{fn this.updateRating song}}
-                   />
+      <StarRating @rating="{{song.rating}}" @onUpdate={{fn this.updateRating song}} />
     </span>
   </li>
   {{/each}}
 </ul>
+{{!--  --}}
+
 {{else}}
+{{!-- # No songs... --}}
 <p class="text-center" data-test-rr="no-songs-text">
   The band has no songs yet.
 </p>
 {{/if}}
 
+{{!-- #Button Add song --}}
 {{#if this.showAddSong}}
 <div class="flex justify-center mt-2">
   <button type="button" class="px-4 py-2 rounded bg-purple-600 shadow-md hover:shadow-lg
@@ -40,7 +75,7 @@ hover:shadow-lg hover:text-white" data-test-rr="save-song-button" {{on "click" t
   <button type="button" {{on "click" (set this "showAddSong" true)}}
     class="ml-2 px-4 p-2 rounded bg-white border border-bg-purple-600 shadow-md text-purple-600 hover:shadow-lg"
     {{on "click" this.cancel}}>
-    
+
     Cancel
   </button>
 </div>

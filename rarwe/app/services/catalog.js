@@ -69,6 +69,7 @@ export default class CatalogService extends Service {
 
   //#create the JSON for a band or a song
   async create(type, attributes, relationships = {}) {
+    
     let payload = {
       data: {
         type: type === 'band' ? 'bands' : 'songs',
