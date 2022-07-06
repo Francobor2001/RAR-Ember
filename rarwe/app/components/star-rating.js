@@ -13,7 +13,6 @@ export default class StarRatingComponent extends Component {
         full: i <= this.args.rating,
       });
     }
-    debugger
     return stars;
   }
 }

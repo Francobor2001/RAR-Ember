@@ -15,6 +15,7 @@ module('Acceptance | bands', function (hooks) {
   //# Create a band
 
   test('Create a band', async function (assert) {
+    debugger
     this.server.create('band', { name: 'Royal Blood' });
 
     await visit('/');
